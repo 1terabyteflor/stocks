@@ -10,15 +10,16 @@ const Search = ({ onSearch }) => {
     };
 
     return (
-        <form onSubmit={handleSearch} style={{ marginBottom: '20px' }}>
+        <form onSubmit={handleSearch} className="mb-4 flex items-center">
             <input 
                 type="text" 
                 placeholder="Buscar..." 
                 value={searchTerm} 
                 onChange={(e) => setSearchTerm(e.target.value)} 
+                className="border border-gray-300 rounded p-2 mr-2"
             />
-            <div>
-                <label>
+            <div className="flex items-center mr-4">
+                <label className="mr-2">
                     <input 
                         type="radio" 
                         value="symbol" 
@@ -37,7 +38,7 @@ const Search = ({ onSearch }) => {
                     Nombre
                 </label>
             </div>
-            <button type="submit">Buscar</button>
+            <button type="submit" className="bg-blue-500 text-white rounded p-2">Buscar</button>
         </form>
     );
 };

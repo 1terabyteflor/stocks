@@ -26,24 +26,27 @@ const Home = () => {
     };
 
     return (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
+        <div className="text-center p-5">
+            <h1 className="text-4xl font-bold mb-4">Stock List</h1>
             <Search onSearch={handleSearch} />
-            <table style={{ margin: '20px auto', width: '80%', borderCollapse: 'collapse' }}>
+            <table className="min-w-full bg-white border border-gray-300">
                 <thead>
                     <tr>
-                        <th>Símbolo</th>
-                        <th>Nombre</th>
-                        <th>Moneda</th>
-                        <th>Tipo</th>
+                        <th className="border border-gray-300 p-2">Símbolo</th>
+                        <th className="border border-gray-300 p-2">Nombre</th>
+                        <th className="border border-gray-300 p-2">Moneda</th>
+                        <th className="border border-gray-300 p-2">Tipo</th>
                     </tr>
                 </thead>
                 <tbody>
                     {filteredStocks.map(stock => (
                         <tr key={stock.symbol}>
-                            <td><Link to={`/stock/${stock.symbol}`}>{stock.symbol}</Link></td>
-                            <td>{stock.name}</td>
-                            <td>{stock.currency}</td>
-                            <td>{stock.type}</td>
+                            <td className="border border-gray-300 p-2">
+                                <Link to={`/stock/${stock.symbol}`} className="text-blue-500 hover:underline">{stock.symbol}</Link>
+                            </td>
+                            <td className="border border-gray-300 p-2">{stock.name}</td>
+                            <td className="border border-gray-300 p-2">{stock.currency}</td>
+                            <td className="border border-gray-300 p-2">{stock.type}</td>
                         </tr>
                     ))}
                 </tbody>
