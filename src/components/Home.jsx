@@ -27,7 +27,10 @@ const Home = () => {
 
     return (
         <div className="text-center p-5">
-            <h1 className="text-4xl font-bold mb-4">Stock List</h1>
+            <h1 className="text-4xl font-bold mb-4">Bienvenido a la Aplicación de Acciones</h1>
+            <p className="mb-4">
+                Esta aplicación te permite consultar acciones del mercado, ver detalles de cada acción y graficar su cotización en tiempo real o histórica.
+            </p>
             <Search onSearch={handleSearch} />
             <table className="min-w-full bg-white border border-gray-300">
                 <thead>
