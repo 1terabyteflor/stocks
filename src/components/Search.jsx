@@ -1,34 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useSearch from '../hooks/useSearch';
 
-const Search = ({ onSearch }) => {
+const Search = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchType, setSearchType] = useState('symbol'); 
-    const [suggestions, setSuggestions] = useState([]);
+    const [searchType, setSearchType] = useState('symbol');
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchSuggestions = async () => {
-            if (searchTerm) {
-                const response = await axios.get(`https://api.twelvedata.com/stocks?source=docs&exchange=NYSE`);
-                const data = response.data.data;
-                const filteredSuggestions = data.filter(stock => 
-                    searchType === 'symbol' 
-                        ? stock.symbol.toLowerCase().includes(searchTerm.toLowerCase()) 
-                        : stock.name.toLowerCase().includes(searchTerm.toLowerCase())
-                );
-                setSuggestions(filteredSuggestions);
-            } else {
-                setSuggestions([]);
-            }
-        };
-
-        fetchSuggestions();
-    }, [searchTerm, searchType]);
+    const { suggestions, loading, error } = useSearch(searchTerm, searchType);
 
     const handleSearch = (e) => {
         e.preventDefault();
-        onSearch(searchTerm, searchType);
-        setSuggestions([]); 
+        if (searchTerm) {
+            navigate(`/stock/${searchTerm}`);
+        }
+        setSearchTerm('');
     };
 
     return (
@@ -63,6 +49,8 @@ const Search = ({ onSearch }) => {
                 </div>
                 <button type="submit" className="bg-blue-500 text-white rounded p-2">Buscar</button>
             </form>
+            {loading && <p>Loading...</p>}
+            {error && <p className="text-red-500">{error}</p>}
             {suggestions.length > 0 && (
                 <ul className="absolute bg-white border border-gray-300 mt-1 w-full z-10">
                     {suggestions.map(stock => (
@@ -70,8 +58,7 @@ const Search = ({ onSearch }) => {
                             key={stock.symbol} 
                             onClick={() => {
                                 setSearchTerm(stock.symbol);
-                                onSearch(stock.symbol, 'symbol'); 
-                                setSuggestions([]); 
+                                navigate(`/stock/${stock.symbol}`); 
                             }} 
                             className="p-2 hover:bg-gray-200 cursor-pointer"
                         >

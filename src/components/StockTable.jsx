@@ -3,52 +3,52 @@ import { Link } from 'react-router-dom';
 
 const StockTable = () => {
     const [stocks, setStocks] = useState([]);
-    const [searchSymbol, setSearchSymbol] = useState('');
-    const [searchName, setSearchName] = useState('');
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         const fetchStocks = async () => {
-            const response = await fetch('https://api.twelvedata.com/stocks?source=docs&exchange=NYSE');
-            const data = await response.json();
-            setStocks(data.data);
+            setLoading(true); 
+            try {
+                const response = await fetch('https://api.twelvedata.com/stocks?source=docs&exchange=NYSE');
+                const data = await response.json();
+                setStocks(data.data);
+            } catch (error) {
+                console.error('Error fetching stocks:', error);
+            } finally {
+                setLoading(false); 
+            }
         };
         fetchStocks();
     }, []);
 
-    const filteredStocks = stocks.filter(stock => 
-        stock.symbol.includes(searchSymbol) && stock.name.toLowerCase().includes(searchName.toLowerCase())
-    );
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <p className="text-lg">Loading...</p>
+            </div>
+        ); 
+    }
 
     return (
-        <div>
-            <input 
-                type="text" 
-                placeholder="Buscar por símbolo" 
-                value={searchSymbol} 
-                onChange={(e) => setSearchSymbol(e.target.value)} 
-            />
-            <input 
-                type="text" 
-                placeholder="Buscar por nombre" 
-                value={searchName} 
-                onChange={(e) => setSearchName(e.target.value)} 
-            />
-            <table>
+        <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-300">
                 <thead>
                     <tr>
-                        <th>Símbolo</th>
-                        <th>Nombre</th>
-                        <th>Moneda</th>
-                        <th>Tipo</th>
+                        <th className="border border-gray-300 p-2">Símbolo</th>
+                        <th className="border border-gray-300 p-2">Nombre</th>
+                        <th className="border border-gray-300 p-2">Moneda</th>
+                        <th className="border border-gray-300 p-2">Tipo</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredStocks.map(stock => (
+                    {stocks.map(stock => (
                         <tr key={stock.symbol}>
-                            <td><Link to={`/stock/${stock.symbol}`}>{stock.symbol}</Link></td>
-                            <td>{stock.name}</td>
-                            <td>{stock.currency}</td>
-                            <td>{stock.type}</td>
+                            <td className="border border-gray-300 p-2">
+                                <Link to={`/stock/${stock.symbol}`} className="text-blue-500 hover:underline">{stock.symbol}</Link>
+                            </td>
+                            <td className="border border-gray-300 p-2">{stock.name}</td>
+                            <td className="border border-gray-300 p-2">{stock.currency}</td>
+                            <td className="border border-gray-300 p-2">{stock.type}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import Search from './Search';
+import StockTable from './StockTable';
 
 const Home = () => {
     const [stocks, setStocks] = useState([]);
@@ -11,7 +11,7 @@ const Home = () => {
             const response = await fetch('https://api.twelvedata.com/stocks?source=docs&exchange=NYSE');
             const data = await response.json();
             setStocks(data.data);
-            setFilteredStocks(data.data); // Inicialmente, mostrar todas las acciones
+            setFilteredStocks(data.data);
         };
         fetchStocks();
     }, []);
@@ -26,31 +26,10 @@ const Home = () => {
     };
 
     return (
-        <div className="text-center p-5">
+        <div className="max-w-4xl mx-auto p-5">
             <h1 className="text-4xl font-bold mb-4">Stock List</h1>
-            <Search onSearch={handleSearch} />
-            <table className="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr>
-                        <th className="border border-gray-300 p-2">Símbolo</th>
-                        <th className="border border-gray-300 p-2">Nombre</th>
-                        <th className="border border-gray-300 p-2">Moneda</th>
-                        <th className="border border-gray-300 p-2">Tipo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredStocks.map(stock => (
-                        <tr key={stock.symbol}>
-                            <td className="border border-gray-300 p-2">
-                                <Link to={`/stock/${stock.symbol}`} className="text-blue-500 hover:underline">{stock.symbol}</Link>
-                            </td>
-                            <td className="border border-gray-300 p-2">{stock.name}</td>
-                            <td className="border border-gray-300 p-2">{stock.currency}</td>
-                            <td className="border border-gray-300 p-2">{stock.type}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <Search onSearch={handleSearch} /> 
+            <StockTable stocks={filteredStocks} /> 
         </div>
     );
 };
