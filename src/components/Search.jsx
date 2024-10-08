@@ -49,7 +49,7 @@ const Search = () => {
                 </div>
                 <button type="submit" className="bg-blue-500 text-white rounded p-2">Buscar</button>
             </form>
-            {loading && <p>Loading...</p>}
+            {loading && <p>Cargando...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {suggestions.length > 0 && (
                 <ul className="absolute bg-white border border-gray-300 mt-1 w-full z-10">

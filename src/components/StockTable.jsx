@@ -1,30 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import useStocks from '../hooks/useStocks'; 
 
 const StockTable = () => {
-    const [stocks, setStocks] = useState([]);
-    const [loading, setLoading] = useState(true); 
-
-    useEffect(() => {
-        const fetchStocks = async () => {
-            setLoading(true); 
-            try {
-                const response = await fetch('https://api.twelvedata.com/stocks?source=docs&exchange=NYSE');
-                const data = await response.json();
-                setStocks(data.data);
-            } catch (error) {
-                console.error('Error fetching stocks:', error);
-            } finally {
-                setLoading(false); 
-            }
-        };
-        fetchStocks();
-    }, []);
-
+    const { filteredStocks, loading } = useStocks(); 
+    
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
-                <p className="text-lg">Loading...</p>
+                <p className="text-lg">Cargando...</p>
             </div>
         ); 
     }
@@ -41,7 +25,7 @@ const StockTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {stocks.map(stock => (
+                    {filteredStocks.map(stock => (
                         <tr key={stock.symbol}>
                             <td className="border border-gray-300 p-2">
                                 <Link to={`/stock/${stock.symbol}`} className="text-blue-500 hover:underline">{stock.symbol}</Link>

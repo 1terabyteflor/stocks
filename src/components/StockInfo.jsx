@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import useStockData from '../hooks/useStockData';
+import useStockData from '../hooks/useStockCompleteData';
 
 const StockInfo = () => {
     const { symbol } = useParams();
+    const navigate = useNavigate();
     const [interval, setInterval] = useState('5min');
     const [historicalData, setHistoricalData] = useState(false);
     const [startDate, setStartDate] = useState('');
@@ -22,9 +23,22 @@ const StockInfo = () => {
         }]
     };
 
+    const handleFetchData = () => {
+        if (historicalData && (!startDate || !endDate)) {
+            alert('Select a valid date! ');
+            return;
+        }
+    };
+
     return (
         <div className="max-w-4xl mx-auto p-5">
-            <h1 className="text-3xl font-bold mb-4">Detalles de {symbol}</h1>
+            <button 
+                onClick={() => navigate(-1)}
+                className="mb-4 bg-gray-300 text-black rounded p-2 hover:bg-gray-400 transition"
+            >
+                Volver
+            </button>
+            <h1 className="text-3xl font-bold mb-4">{symbol}</h1>
             <div className="mb-4">
                 <label className="mr-4">
                     <input 
@@ -49,7 +63,7 @@ const StockInfo = () => {
             </div>
             {historicalData && (
                 <div className="mb-4">
-                    <h3 className="text-lg font-semibold mb-2">Selecciona el rango de fechas</h3>
+                    <h3 className="text-lg font-semibold mb-2">Fechas</h3>
                     <input 
                         type="datetime-local" 
                         value={startDate} 
@@ -65,20 +79,20 @@ const StockInfo = () => {
                 </div>
             )}
             <div className="mb-4">
-                <label className="mr-2">Intervalo:</label>
+                <label className="mr-2">Intervalo</label>
                 <select onChange={(e) => setInterval(e.target.value)} value={interval} className="border border-gray-300 rounded p-2">
-                    <option value="1min">1 Minuto</option>
-                    <option value="5min">5 Minutos</option>
-                    <option value="15min">15 Minutos</option>
+                    <option value="1min">1 MIN</option>
+                    <option value="5min">5 MIN</option>
+                    <option value="15min">15 MIN</option>
                 </select>
             </div>
             <button 
-                onClick={() => {}} 
+                onClick={handleFetchData}
                 className="bg-blue-500 text-white rounded p-2 hover:bg-blue-600 transition"
             >
                 {historicalData ? 'Obtener Datos Históricos' : 'Obtener Datos en Tiempo Real'}
             </button>
-            {loading && <p>Cargando datos...</p>}
+            {loading && <p>Cargando...</p>}
             {error && <p className="text-red-500">{error}</p>}
             <div className="mt-5">
                 <HighchartsReact
