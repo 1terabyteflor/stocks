@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import useStocks from '../hooks/useStocks'; 
 
-const StockTable = () => {
-    const { filteredStocks, loading } = useStocks(); 
-    
+const StockTable = ({ stocks, loading }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 25; 
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = stocks.slice(indexOfFirstItem, indexOfLastItem);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const totalPages = Math.ceil(stocks.length / itemsPerPage);
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -13,9 +21,10 @@ const StockTable = () => {
         ); 
     }
 
+
     return (
         <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300">
+            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
                 <thead>
                     <tr>
                         <th className="border border-gray-300 p-2">Símbolo</th>
@@ -25,7 +34,7 @@ const StockTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredStocks.map(stock => (
+                    {currentItems.map(stock => (
                         <tr key={stock.symbol}>
                             <td className="border border-gray-300 p-2">
                                 <Link to={`/stock/${stock.symbol}`} className="text-blue-500 hover:underline">{stock.symbol}</Link>
@@ -37,6 +46,25 @@ const StockTable = () => {
                     ))}
                 </tbody>
             </table>
+
+            <div className="flex justify-center mt-4">
+                {currentPage > 1 && (
+                    <button
+                        onClick={() => paginate(currentPage - 1)}
+                        className="mx-1 px-3 py-1 rounded-lg bg-gray-300 hover:bg-gray-400 transition"
+                    >
+                        Anterior
+                    </button>
+                )}
+                {currentPage < totalPages && (
+                    <button
+                        onClick={() => paginate(currentPage + 1)}
+                        className="mx-1 px-3 py-1 rounded-lg bg-gray-300 hover:bg-gray-400 transition"
+                    >
+                        Siguiente
+                    </button>
+                )}
+            </div>
         </div>
     );
 };

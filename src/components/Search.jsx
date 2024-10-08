@@ -22,37 +22,17 @@ const Search = () => {
             <form onSubmit={handleSearch} className="flex items-center">
                 <input 
                     type="text" 
-                    placeholder="Buscar..." 
+                    placeholder="Ej: AAM" 
                     value={searchTerm} 
                     onChange={(e) => setSearchTerm(e.target.value)} 
-                    className="border border-gray-300 rounded p-2 mr-2 w-full"
+                    className="border border-gray-300 rounded-xl p-2 mr-2 w-full"
                 />
-                <div className="flex items-center mr-4">
-                    <label className="mr-2">
-                        <input 
-                            type="radio" 
-                            value="symbol" 
-                            checked={searchType === 'symbol'} 
-                            onChange={() => setSearchType('symbol')} 
-                        />
-                        Símbolo
-                    </label>
-                    <label>
-                        <input 
-                            type="radio" 
-                            value="name" 
-                            checked={searchType === 'name'} 
-                            onChange={() => setSearchType('name')} 
-                        />
-                        Nombre
-                    </label>
-                </div>
-                <button type="submit" className="bg-blue-500 text-white rounded p-2">Buscar</button>
+                <button type="submit" className="bg-purple-primary text-white rounded-xl p-2 mr-2">Buscar</button>
             </form>
-            {loading && <p>Cargando...</p>}
+                        {loading && <p>Cargando...</p>}
             {error && <p className="text-red-500">{error}</p>}
             {suggestions.length > 0 && (
-                <ul className="absolute bg-white border border-gray-300 mt-1 w-full z-10">
+                <ul className="absolute bg-white border border-gray-300 mt-1 w-full z-1">
                     {suggestions.map(stock => (
                         <li 
                             key={stock.symbol} 
@@ -67,6 +47,30 @@ const Search = () => {
                     ))}
                 </ul>
             )}
+
+            <div className="flex items-center text-sm gap-x-2 my-2">
+                <p>Buscar por</p>
+                    <label>
+                        <input 
+                            type="radio" 
+                            value="symbol"
+                            className='mr-1' 
+                            checked={searchType === 'symbol'} 
+                            onChange={() => setSearchType('symbol')} 
+                        />
+                        símbolo
+                    </label>
+                    <label>
+                        <input 
+                            type="radio" 
+                            value="name" 
+                            className='mr-1' 
+                            checked={searchType === 'name'} 
+                            onChange={() => setSearchType('name')} 
+                        />
+                        nombre
+                    </label>
+                </div>
         </div>
     );
 };

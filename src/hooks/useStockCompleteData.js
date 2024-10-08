@@ -4,6 +4,7 @@ const useStockData = (symbol, interval, historicalData, startDate, endDate) => {
     const [stockData, setStockData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const baseApiUrl = `https://api.twelvedata.com/time_series?apikey=${process.env.API_KEY}`
 
     useEffect(() => {
         const fetchStockData = async () => {
@@ -11,8 +12,8 @@ const useStockData = (symbol, interval, historicalData, startDate, endDate) => {
             setError(null);
             try {
                 const url = historicalData 
-                    ? `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=${interval}&start_date=${startDate}&end_date=${endDate}&apikey=e41f904122db48659f7940a9f498308b`
-                    : `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=${interval}&apikey=e41f904122db48659f7940a9f498308b`;
+                    ? `${baseApiUrl}?symbol=${symbol}&interval=${interval}&start_date=${startDate}&end_date=${endDate}`
+                    : `${baseApiUrl}?symbol=${symbol}&interval=${interval}`;
 
                 const response = await fetch(url);
                 if (!response.ok) {
