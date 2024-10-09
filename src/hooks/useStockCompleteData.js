@@ -11,6 +11,8 @@ const useStockData = (symbol, interval, historicalData, startDate, endDate) => {
             setLoading(true);
             setError(null);
             try {
+                //TODO: Guardar api key en .env 
+                
                 const url = historicalData 
                     ? `${baseApiUrl}symbol=${symbol}&interval=${interval}&start_date=${startDate}&end_date=${endDate}&apikey=e41f904122db48659f7940a9f498308b`
                     : `${baseApiUrl}symbol=${symbol}&interval=${interval}&apikey=e41f904122db48659f7940a9f498308b`;
