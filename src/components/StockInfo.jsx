@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Highcharts from 'highcharts';
+import Highcharts, { color } from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import useStockData from '../hooks/useStockCompleteData';
 
@@ -19,6 +19,7 @@ const StockInfo = () => {
             text: `Cotización de ${symbol}`
         },
         series: [{
+            color: 'purple',
             data: stockData ? stockData.map(item => [new Date(item.datetime).getTime(), parseFloat(item.close)]) : []
         }]
     };
@@ -32,13 +33,17 @@ const StockInfo = () => {
 
     return (
         <div className="max-w-4xl mx-auto p-5">
+            <div className='flex justify-start gap-x-8 items-center mb-4'>
             <button 
                 onClick={() => navigate(-1)}
-                className="mb-4 bg-gray-300 text-black rounded p-2 hover:bg-gray-400 transition"
+                className="rounded-lg border p-2 text-xs hover:bg-gray-400 transition"
             >
                 Volver
             </button>
-            <h1 className="text-3xl font-bold mb-4">{symbol}</h1>
+            <h1 className="text-5xl font-bold text-purple-primary">{symbol}</h1>
+
+            </div>
+            <div className='flex flex-col'>
             <div className="mb-4">
                 <label className="mr-4">
                     <input 
@@ -46,7 +51,7 @@ const StockInfo = () => {
                         value="realTime" 
                         checked={!historicalData} 
                         onChange={() => setHistoricalData(false)} 
-                        className="mr-1"
+                        className="mr-1 accent-purple-primary"
                     />
                     Tiempo Real
                 </label>
@@ -56,7 +61,7 @@ const StockInfo = () => {
                         value="historical" 
                         checked={historicalData} 
                         onChange={() => setHistoricalData(true)} 
-                        className="mr-1"
+                        className="mr-1 accent-purple-primary"
                     />
                     Histórico
                 </label>
@@ -81,17 +86,19 @@ const StockInfo = () => {
             <div className="mb-4">
                 <label className="mr-2">Intervalo</label>
                 <select onChange={(e) => setInterval(e.target.value)} value={interval} className="border border-gray-300 rounded p-2">
-                    <option value="1min">1 MIN</option>
-                    <option value="5min">5 MIN</option>
-                    <option value="15min">15 MIN</option>
+                    <option value="1min">1 min</option>
+                    <option value="5min">5 min</option>
+                    <option value="15min">15 min</option>
                 </select>
             </div>
             <button 
                 onClick={handleFetchData}
-                className="bg-blue-500 text-white rounded p-2 hover:bg-blue-600 transition"
+                className="bg-purple-primary text-white rounded p-2 hover:bg-gray-700 transition"
             >
                 {historicalData ? 'Obtener Datos Históricos' : 'Obtener Datos en Tiempo Real'}
             </button>
+
+            </div>
             {loading && <p>Cargando...</p>}
             {error && <p className="text-red-500">{error}</p>}
             <div className="mt-5">

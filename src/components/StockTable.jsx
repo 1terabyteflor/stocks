@@ -37,7 +37,7 @@ const StockTable = ({ stocks, loading }) => {
                     {currentItems.map(stock => (
                         <tr key={stock.symbol}>
                             <td className="border border-gray-300 p-2">
-                                <Link to={`/stock/${stock.symbol}`} className="text-blue-500 hover:underline">{stock.symbol}</Link>
+                                <Link to={`/stock/${stock.symbol}`} className="text-purple-primary hover:text-gray-700 hover:underline">{stock.symbol}</Link>
                             </td>
                             <td className="border border-gray-300 p-2">{stock.name}</td>
                             <td className="border border-gray-300 p-2">{stock.currency}</td>
@@ -51,7 +51,7 @@ const StockTable = ({ stocks, loading }) => {
                 {currentPage > 1 && (
                     <button
                         onClick={() => paginate(currentPage - 1)}
-                        className="mx-1 px-3 py-1 rounded-lg bg-gray-300 hover:bg-gray-400 transition"
+                        className="mx-1 px-3 py-1 rounded-lg border hover:bg-gray-100 transition"
                     >
                         Anterior
                     </button>
@@ -59,7 +59,7 @@ const StockTable = ({ stocks, loading }) => {
                 {currentPage < totalPages && (
                     <button
                         onClick={() => paginate(currentPage + 1)}
-                        className="mx-1 px-3 py-1 rounded-lg bg-gray-300 hover:bg-gray-400 transition"
+                        className="mx-1 px-3 py-1 rounded-lg border hover:bg-gray-100 transition"
                     >
                         Siguiente
                     </button>
